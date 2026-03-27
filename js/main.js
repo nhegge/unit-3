@@ -1,127 +1,64 @@
-// Javascript written by Nolan Hegge, 1/23/2026
-// Original Code Source: GEOG 575 - Activity 8
-// Credit to Chapter 8 for boiler plate code used to complete this activity
+// Javascript written by Nolan Hegge, 3/26/2026
+// Original Code Source: GEOG 575 - Activity 9
 
-window.onload = function () {
+//start the code once the window loads
+window.onload = setMap();
 
-    //set the SVG dimensions
-    var w = 900, h = 500;
+//set up a choropleth map
+function setMap() {
 
-    //city population data from chapter 2
-    var cityPop = [
-        { city: 'Madison',   population: 233209 },
-        { city: 'Milwaukee', population: 594833 },
-        { city: 'Green Bay', population: 104057 },
-        { city: 'Superior',  population: 27244  }
-    ];
+    //dimensions for map frame
+    var width = 960,
+        height = 500;
 
-    // set the min and max population for the sscales
-    var minPop = d3.min(cityPop, function(d) { return d.population; });
-    var maxPop = d3.max(cityPop, function(d) { return d.population; });
-
-    // generate the scales
-    var x = d3.scaleLinear() //make scale  for x
-        .range([90, 700])    //output min and max - modified to make content fit comfortably
-        .domain([0, 3]);     //input min and max
-
-    var y = d3.scaleLinear() //make scale  for y
-        .range([450, 50]) //output min and max - modified to make content fit comfortably
-        .domain([0, 700000]); //input min and max
-
-    //make a color scale for the cicles
-    var color = d3.scaleLinear()
-        .range(["#FDBE85", "#D94701"])
-        .domain([minPop, maxPop]);
-
-    //create a format generator
-    var format = d3.format(",");
-
-    //make a variable for the SVG container block
-    var container = d3.select("body")
+    //create a new svg container for the map
+    var map = d3.select("body")
         .append("svg")
-        .attr("width", w)
-        .attr("height", h)
-        .attr("class", "container")
-        .style("background-color", "rgba(0,0,0,0.2)");
+        .attr("class", "map")
+        .attr("width", width)
+        .attr("height", height);
 
-    //block for the inner rectangle
-    var innerRect = container.append("rect")
-        .datum(400)
-        .attr("width", 800)
-        .attr("height", 400)
-        .attr("class", "innerRect")
-        .attr("x", 50)
-        .attr("y", 50)
-        .style("fill", "#FFFFFF");
+    //use Albers equal-area conic projection centered on the USA (not just midwest like code example so parameters are adjusted)
+    var projection = d3.geoAlbers()
+        .center([0, 38.5])
+        .rotate([98, 0])
+        .parallels([29.5, 45.5])
+        .scale(1000)
+        .translate([width / 2, height / 2]);
 
-    //block for the circles
-    var circles = container.selectAll(".circles")
-        .data(cityPop)
-        .enter()
-        .append("circle")
-        .attr("class", "circles")
-        .attr("id", function(d) { return d.city; })
-        .attr("r", function(d) {
-            var area = d.population * 0.01;
-            return Math.sqrt(area / Math.PI);
-        })
-        .attr("cx", function(d, i) {
-            return x(i);
-        })
-        .attr("cy", function(d) {
-            return y(d.population);
-        })
-        .style("fill", function(d) {
-            return color(d.population);
-        })
-        .style("stroke", "#000");
+    //create a path generator
+    var path = d3.geoPath()
+        .projection(projection);
 
-    //generate the y axis
-    var yAxis = d3.axisLeft(y);
+    //use Promise.all to parallelize the asynchronous data loading
+    var promises = [
+        d3.csv("data/LivingExpensesUnitedStatesMultivariateData.csv"),
+        d3.json("data/unitedStatesTopo.topojson")
+    ];
+    Promise.all(promises).then(callback);
 
-    //block for the axis
-    var axis = container.append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(50, 0)")
-        .call(yAxis);
+	//define the callback function to ensure map is properly drawn
+    function callback(data) {
+        var csvData = data[0],
+            usData = data[1];
 
-    //block for the title
-    var title = container.append("text")
-        .attr("class", "title")
-        .attr("text-anchor", "middle")
-        .attr("x", 450)
-        .attr("y", 30)
-        .text("City Populations");
+        console.log(csvData);
+        console.log(usData);
 
-    //block folr the labels
-    var labels = container.selectAll(".labels")
-        .data(cityPop)
-        .enter()
-        .append("text")
-        .attr("class", "labels")
-        .attr("text-anchor", "left")
-        .attr("y", function(d) {
-			//added -8 to ensure that the labels are centered
-            return y(d.population) - 8;
-        });
+        //convert TopoJSON to GeoJSON
+        var usStates = topojson.feature(usData, usData.objects.unitedStatesTopo).features;
 
-    //first line of the label (cityu name)
-    var nameLine = labels.append("tspan")
-        .attr("class", "nameLine")
-        .attr("x", function(d, i) {
-            return x(i) + Math.sqrt(d.population * 0.01 / Math.PI) + 5;
-        })
-        .text(function(d) { return d.city; });
+        console.log(usStates);
 
-    //first line of the label (population)
-    var popLine = labels.append("tspan")
-        .attr("class", "popLine")
-        .attr("x", function(d, i) {
-            return x(i) + Math.sqrt(d.population * 0.01 / Math.PI) + 5;
-        })
-        .attr("dy", "15")
-        .text(function(d) {
-            return "Pop. " + format(d.population);
-        });
-
+        //add states to map (enumeration units)
+        var states = map
+            .selectAll(".states")
+            .data(usStates)
+            .enter()
+            .append("path")
+            .attr("class", function(d) {
+                return "states " + d.properties.postal;
+            })
+            .attr("d", path);
+    };
 };
