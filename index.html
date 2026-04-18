@@ -1,22 +1,56 @@
 <!DOCTYPE html>
-<!-- Created by Nolan Hegge, 3/26/2026, template from UW Cartography Lab -->
+<!-- Created by Nolan Hegge, 4/16/2026, template from UW Cartography Lab -->
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-            <title>Unit 3</title>
-        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-        <!--put your external stylesheet links here-->
-        <link rel="stylesheet" href="css/style.css">
-    </head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Midwest Living Expenses</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
-    <body>
-        <!--put your initial page content here-->
-        <div id="mydiv"></div>
+    <!-- Title of the page and subtitle -->
+    <div id="page-title">
+        <h1>Cost of Living Across the Midwest & Great Lakes Region (2024)</h1>
+        <p>An interactive application to explore and compare income, rent, unemployment, and resident demographics across 16 states</p>
+    </div>
 
-        <!--put your external script links here-->
-        <script type="text/javascript" src="lib/d3.v7.min.js"></script>
-        <script type="text/javascript" src="lib/topojson.min.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
-    </body>
+    <!-- text to explain the map -->
+    <div id="intro-text">
+        <p>
+            This visualization explores major factors (attributes) influencing the cost of living in the Midwest and Great Lakes region of the United States in 2024. The attributes depicted in this visualization are: median household income, average rent for a 1 bedroom apartment, unemployment rate, population density per square mile, and average age.
+            You can use the dropdown menu below to select which factor you would like to visualize on the choropleth map on the left and the bar chart on the right. 
+            Hover over any state on the map or bar graph in the cart to see more detailed information about that State.
+            The bar graph plots the selected factor on the y-axis and the States (in  ascending order based on the selected factor) from left to right.
+        </p>
+    </div>
+
+    <!-- dropdown controls -->
+    <div id="controls"></div>
+
+    <!-- map and chart side by side -->
+    <div id="viz-container">
+        <div id="map-container"></div>
+        <div id="chart-container"></div>
+    </div>
+
+    <!-- citations for the data -->
+    <div id="citations">
+        <h3>Data Sources:</h3>
+        <p>
+            Living expense data: U.S. Census Bureau, American Community Survey (ACS) 5-Year Estimates. |
+            Rent data: U.S. Department of Housing and Urban Development (HUD) Fair Market Rents. |
+            Unemployment data: U.S. Bureau of Labor Statistics (BLS). |
+            Population density calculated from: U.S. Census Bureau, State Area Measurements and Internal Point Coordinates (2010), census.gov/geographies/reference-files/2010/geo/state-area.html. |
+            State boundary data: Natural Earth, 1:110m Cultural Vectors, Admin 1 States and Provinces.
+        </p>
+    </div>
+
+    <!-- External scripts -->
+    <script type="text/javascript" src="lib/d3.v7.min.js"></script>
+    <script type="text/javascript" src="lib/topojson.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
+</body>
 </html>

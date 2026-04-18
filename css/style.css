@@ -1,14 +1,185 @@
-/* Stylesheet made by Nolan Hegge, 3/26/2026 */
-/* Boilerplate code used from Activity 9 and 10 */
+/* Stylesheet written by Nolan Hegge, 4/17/2026 */
+/* Green color scheme from coolors.co (https://coolors.co/palette/dad7cd-a3b18a-588157-3a5a40-344e41)with modifications for easier viewing in the map */ 
+/* Original Code Source: UW Cartography Lab */
+
+/* Page styling */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+}
+
+#page-title {
+    text-align: center;
+    padding: 15px 20px 5px 20px;
+    background: #344e41;
+    color: #fff;
+}
+
+#page-title h1 {
+    margin: 0;
+    font-size: 1.6em;
+}
+
+#page-title p {
+    margin: 5px 0 0 0;
+    font-size: 0.9em;
+    color: #dad7cd;
+}
+
+#intro-text {
+    max-width: 1200px;
+    margin: 10px auto;
+    padding: 0 20px;
+    font-size: 0.9em;
+    color: #333;
+}
+
+#controls {
+    max-width: 1200px;
+    margin: 5px auto 5px 10px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dropdown-label {
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #344e41;
+}
+
+.dropdown {
+    padding: 5px 10px;
+    font-size: 0.9em;
+    border: 1px solid #588157;
+    border-radius: 4px;
+    background: #fff;
+    color: #344e41;
+    cursor: pointer;
+}
+
+.dropdown:hover {
+    background: #dad7cd;
+}
+
+#viz-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 10px;
+}
+
+#map-container {
+    flex: 1;
+}
+
+#chart-container {
+    flex: 1;
+}
+
+#citations {
+    max-width: 1200px;
+    margin: 10px auto;
+    padding: 5px 20px 15px 20px;
+    font-size: 0.8em;
+    color: #555;
+    border-top: 1px solid #ccc;
+}
+
+#citations h3 {
+    margin: 5px 0;
+    color: #344e41;
+}
+
+/* map styling */
 .map {
     border: medium solid #999;
     margin: 5px 0 0 0;
     background: #D5E3FF;
+    display: block;
 }
 
+.us-background {
+    fill: #e8e8e8;
+    stroke: #ccc;
+    stroke-width: 0.5px;
+}
+
+.midwest-state {
+    stroke: #fff;
+    stroke-width: 1px;
+    stroke-linecap: round;
+    cursor: pointer;
+}
+
+.midwest-state:hover {
+    stroke: #000;
+    stroke-width: 2px;
+}
+
+/* chart styling */
 .chart {
-    background-color: rgba(128,128,128,.2);
+    background-color: rgba(128,128,128,.15);
     border: medium solid #999;
-    float: right;
     margin: 5px 0 0 0;
+    display: block;
+}
+
+/* axis styling */
+.yaxis path, .yaxis line,
+.xaxis path, .xaxis line {
+    fill: none;
+    stroke: #333;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
+
+.yaxis text, .xaxis text {
+    font-family: sans-serif;
+    font-size: 0.7em;
+}
+
+.axis-label {
+    font-family: sans-serif;
+    font-size: 0.8em;
+    font-weight: bold;
+    fill: #333;
+}
+
+/* label retreive styling */
+.infolabel {
+    position: fixed;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid #588157;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.85em;
+    pointer-events: none;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+    color: #333;
+    min-width: 140px;
+}
+
+/* bar chart styling */
+.chartBackground {
+    fill: rgba(255,255,255,0.3);
+}
+
+.bar {
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.bar:hover {
+    opacity: 1;
+}
+
+.chart-title {
+    font-family: sans-serif;
+    font-size: 0.95em;
+    font-weight: bold;
+    fill: #344e41;
 }
